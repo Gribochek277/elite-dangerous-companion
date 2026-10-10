@@ -1,0 +1,17 @@
+repository: serhii/elite-dangerous-companion
+commit: 46d6fae4786a483e2317c8473174f8ca5e84d2ce
+date: 2026-10-10T11:24:33+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+chore: project scaffold with plan and ticket store
+Bootstrap the repository for the Elite Dangerous Companion extension:
+the design document, a Markdown ticket store for the orchestrator, and
+project instructions for agents.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
