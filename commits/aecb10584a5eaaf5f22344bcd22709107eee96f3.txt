@@ -1,0 +1,14 @@
+repository: serhii/elite-dangerous-companion
+commit: aecb10584a5eaaf5f22344bcd22709107eee96f3
+date: 2026-10-12T21:11:37+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+status: start ticket 13
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
