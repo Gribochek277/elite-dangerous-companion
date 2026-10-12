@@ -1,0 +1,21 @@
+repository: serhii/elite-dangerous-companion
+commit: e2e6bdfa3e2014748d3a76360f4ea21c957b5cfe
+date: 2026-10-12T15:24:39+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): add 8 analytics summaries and 9 prompt commands
+Eight pure summaries (exploration, trading, combat, journey, mining,
+mission, engineering, performance) window buffered journal events to an
+hours window and return a uniform totals/rates/highlights/breakdown
+result. Nine /elite-* commands build live context from a snapshot and
+send it to the model as a user message, working outside the TUI.
+
+Unit tests pin each summary's arithmetic against an EventStore fixture.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
