@@ -1,0 +1,14 @@
+repository: serhii/elite-dangerous-companion
+commit: 849d4b0f91d4b6fadbc359795a8c9072331c9844
+date: 2026-10-12T19:00:21+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 11: 11-edcopilot-chatter-generation
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
