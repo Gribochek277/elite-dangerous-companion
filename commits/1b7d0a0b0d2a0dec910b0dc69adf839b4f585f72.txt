@@ -1,0 +1,25 @@
+repository: serhii/elite-dangerous-companion
+commit: 1b7d0a0b0d2a0dec910b0dc69adf839b4f585f72
+date: 2026-10-12T16:40:29+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): apply the idle gate to digests, silence delivery in quiet hours, suppress replay notifications
+Review round 1 found three blocking issues. This commit fixes them:
+
+- sendOptions now queues non-critical (digest/live) deliveries as a follow-up
+  while the agent is busy, so a digest never steers/interrupts a running turn.
+- flush() consults quiet hours and holds a queued digest until the window
+  closes instead of delivering inside it.
+- backfill and startup-bootstrap replays are never notified: ingest carries
+  body.mode through onJournalLines, the local watcher marks its bootstrap poll
+  in JournalEventsMeta, and notifyEligible also archives any event older than
+  the digestMinutes window. Added end-to-end runtime tests and pure
+  isNotifiableEvent coverage.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
