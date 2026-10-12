@@ -1,0 +1,18 @@
+repository: serhii/elite-dangerous-companion
+commit: 89b1383f96d25d276a68ab5ea07acfb110f2b8ac
+date: 2026-10-12T19:22:39+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): register the eight elite_theme_* tools
+Status, set, preview, apply, reset, ship configuration, prompt generation and
+preset save — all codemode under the elite namespace. Apply runs the grammar
+validator before writing and backs up existing EDCoPilot files; reset keeps
+the theme history and saved presets.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
