@@ -1,0 +1,20 @@
+repository: serhii/elite-dangerous-companion
+commit: 1c971bac0597f46819ede9f226b49b1487c4e6ae
+date: 2026-10-12T11:28:31+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): detect real Heroic prefixes from Heroic's config
+Read Heroic's config.json (native and flatpak) and take the
+defaultWinePrefix/winePrefix as the prefix root, then list each game
+directory directly under it. Game prefixes have no 'pfx' segment:
+<root>/<game>/drive_c/users/<user>/Saved Games/... Fall back to
+~/Games/Heroic/Prefixes/default and the flatpak equivalent when no config is
+readable.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
