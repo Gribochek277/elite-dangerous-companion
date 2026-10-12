@@ -1,0 +1,14 @@
+repository: serhii/elite-dangerous-companion
+commit: 17f2d08e18a0483420538f8b801d45987157a16e
+date: 2026-10-12T18:18:23+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): bound chatter context to 30 min, vendor grammar doc, contextual golden, export/edcopilot subdir
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
