@@ -1,0 +1,23 @@
+repository: serhii/elite-dangerous-companion
+commit: f5e8213d32d260860307b8278392ffa3c2cc9c60
+date: 2026-10-12T10:11:28+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): resume incremental reads across rotations and sessions
+- key reader offsets and the active file by (timestamp, part) identity so a
+  .log -> .log.backup rename drains the previous active's tail instead of
+  re-reading it from offset 0
+- add an explicit bootstrapped flag so a backup-only directory is not treated
+  as a fresh bootstrap when the first live log appears
+- keep the reader cursor alive across stop()/start() so a second session
+  resumes incrementally instead of duplicating history into the store
+- construct the live store with config.maxRecentEvents and isolate config
+  tests from ambient ELITE_* variables
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
