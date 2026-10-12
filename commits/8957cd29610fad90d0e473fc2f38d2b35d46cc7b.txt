@@ -1,0 +1,18 @@
+repository: serhii/elite-dangerous-companion
+commit: 8957cd29610fad90d0e473fc2f38d2b35d46cc7b
+date: 2026-10-12T13:22:56+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): report not-configured instead of zero events when unconfigured
+elite_events and elite_search now return the not-configured message as the
+model-facing text when the resolver reports source "none", matching
+elite_status. Added a regression test that forces an unconfigured resolver via
+an empty scratch HOME and asserts both tools answer with the message.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
