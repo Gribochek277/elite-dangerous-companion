@@ -1,0 +1,25 @@
+repository: serhii/elite-dangerous-companion
+commit: 05035158a4c215c0915f5df5c0fe22b5e5cd5ab0
+date: 2026-10-12T19:09:09+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): UTC filename timestamps and archive-before-commit ordering
+- parse zone-less journal filename timestamps as UTC in core/journal.ts, the
+  client streamer and the mock tool, so range pre-filters compare like-for-like
+  with the UTC bounds from core/date.ts on any host time zone
+- journal.ts pins the parsed epoch for both filename formats under a non-UTC TZ
+- run the archive hook before committing the reader offset and before the
+  ingest cursor save/store ingest: a failed append (ENOSPC/EACCES) leaves the
+  offset/cursor untouched so the bytes are retried, never skipped
+- report archive write failures distinctly (onArchiveError / archive-write-failed
+  500 + warning) instead of collapsing them into read-failure messages
+- tests: failed local archive leaves the offset unadvanced and retries exactly
+  once; failed remote archive leaves the cursor unsaved and the batch retryable
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
