@@ -1,0 +1,32 @@
+repository: serhii/elite-dangerous-companion
+commit: 67a22bc888454e032dc5eee7e80bee43a7f42445
+date: 2026-10-12T23:21:47+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): expand lore wiki templates and drop empty emphasis runs (ticket 15)
+The lore snapshot cleaner dropped every {{...}} template, so pages that open
+with '''{{PAGENAME}}''' rendered as '****', the timeline year rendered as
+'****', and a dropped template between emphasis markers left empty runs.
+
+- lore/wikitext.ts: expand the templates that carry prose — {{PAGENAME}},
+  {{CURRENTYEAR}}/{{CURRENTDATE}}, {{#time:…}}, {{Quote}} as a blockquote with
+  its attribution, and {{Confuse}}/{{For}}/{{Main}}/{{See also}} as one italic
+  pointer line — and keep dropping infoboxes, navboxes, banners and the rest.
+  <math>/<code> spans are shielded so LaTeX braces survive; dropped templates
+  between emphasis markers no longer leave '****'; literal wiki footnote
+  asterisk runs are removed instead of colliding with converted bold markers.
+- scripts/snapshot-lore.mjs: pass the page title and one snapshot instant to
+  the cleaner, and record that same instant in index.json.
+- lore snapshot regenerated: 90 pages, no raw templates or empty emphasis runs
+  (Powerplay now opens with its name, the timeline states the year).
+- test/lore.test.mjs: fragment tests for quote, PAGENAME inside bold-italic,
+  dropped templates between markers and math spans, plus a page-wide snapshot
+  assertion and the Powerplay/timeline checks.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
