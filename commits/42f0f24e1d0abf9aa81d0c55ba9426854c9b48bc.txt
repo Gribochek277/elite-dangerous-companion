@@ -1,0 +1,17 @@
+repository: serhii/elite-dangerous-companion
+commit: 42f0f24e1d0abf9aa81d0c55ba9426854c9b48bc
+date: 2026-10-12T19:22:45+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+test(elite): theme system tests and tool-list updates
+Covers preset grammar validity, storage round-trips, ship crew composition,
+prompt generation, template parsing, preview, validation-failure apply and
+reset. Extends the two factory tool-list assertions with the eight new tools.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
