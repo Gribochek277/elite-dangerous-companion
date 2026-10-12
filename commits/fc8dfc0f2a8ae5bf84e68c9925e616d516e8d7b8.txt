@@ -1,0 +1,20 @@
+repository: serhii/elite-dangerous-companion
+commit: fc8dfc0f2a8ae5bf84e68c9925e616d516e8d7b8
+date: 2026-10-12T16:32:38+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): analytics commands read the remote store when a client is connected
+EliteRuntime.currentEvents() only returned the live store when a local
+watcher was running, so with a streaming client (the primary client-server
+mode) it fell through to snapshot() and reported "not configured". It now
+checks remoteMachineId first, mirroring summary(), currentSnapshot() and
+query(). A bridge test pins that currentEvents() reports source "remote"
+and the remote events while a client is connected.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
