@@ -1,0 +1,21 @@
+repository: serhii/elite-dangerous-companion
+commit: 02adec7ff88604d83f8c30490f0f5c1aa70744b9
+date: 2026-10-12T10:48:24+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): correct pi-config path resolution and macOS journal path
+- treat XDG_CONFIG_HOME as a base directory (the user config dir is
+  <xdg>/pi), not as the config dir itself
+- trim every env override so empty-string values count as unset
+- suppress the system layer for PI_CONFIG_DISABLE_SYSTEM=1/true
+  (case-insensitive)
+- drop the Saved Games segment from the macOS journal candidate while
+  keeping it for Windows
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
