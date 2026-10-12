@@ -1,0 +1,32 @@
+repository: serhii/elite-dangerous-companion
+commit: 2856872d0dbdf47a0cf1cdfe67fa8893a2ab2446
+date: 2026-10-12T12:31:44+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): client-server stream bridge (ticket 04)
+A game machine now streams its journal to the server over HTTP with a
+bearer token, and the agent sees live data exactly as if the game ran
+locally — surviving disconnects, reboots of either side and long offline
+periods.
+
+- client/elite-stream.mjs: watches the journal dir, tracks a byte offset
+  per file, spools un-acknowledged lines locally, and catches up by cursor
+  on reconnect; first connect backfills backfillDays then streams deltas.
+- net/protocol.ts + net/auth.ts: wire types, byte-cursor de-duplication,
+  constant-time bearer check and the known-machine rule.
+- net/ingest.ts: POST /ingest + GET /health listener (the only socket),
+  per-client cursors persisted to the data dir, idle-timeout disconnect.
+- index.ts: source auto-switching — a connected client takes precedence
+  over the local journal path and is visible in elite_status.
+- scripts/elite-play.sh: starts the streamer, waits for readiness, launches
+  the game, and stops the streamer when the game exits.
+- test/tools/mock-stream.mjs + ingest/protocol/auth/bridge tests: replay
+  fixtures, drop mid-backfill, reconnect, and assert no loss or duplication.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
