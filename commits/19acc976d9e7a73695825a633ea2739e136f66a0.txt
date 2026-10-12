@@ -1,0 +1,19 @@
+repository: serhii/elite-dangerous-companion
+commit: 19acc976d9e7a73695825a633ea2739e136f66a0
+date: 2026-10-12T15:21:34+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): survive post-connect poll failures and enforce the backfill window on every pass
+- run() guards its post-connect poll (and uses an interruptible sleep), so a
+  transient /ingest failure after a successful connect marks the client
+  disconnected and keeps spooling instead of exiting.
+- backfill() applies the backfillDays cutoff on every pass, not only the
+  first, so a heartbeat-triggered re-backfill never re-uploads old journals.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
