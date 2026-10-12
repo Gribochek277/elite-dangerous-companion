@@ -1,0 +1,29 @@
+repository: serhii/elite-dangerous-companion
+commit: 49ab87f15fa7b212e69e51308b6e33ff70d90b0b
+date: 2026-10-12T20:30:19+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): gate the historian nested call on headless, not isIdle, and unref timers
+- before_agent_start is not headless (a turn is about to run), yet the
+  session is still idle there, so isIdle() gated the nested briefing model
+  call into every out-of-game prompt. Replace the gate with an explicit
+  headless flag decided by the caller: before_agent_start always injects the
+  grounded passages; session_start composes via the nested call only in a
+  non-interactive (print/json) session and caches it for before_agent_start.
+- Bound the nested model call with a 30s timeout so a slow model cannot hang
+  session start; degrade to the grounded passages on timeout or failure.
+- Bound the snapshot script's wiki fetches with a 30s abort timeout.
+- unref() the journal watcher poll interval and the ingest scan interval so a
+  live runtime can never wedge a consumer's event loop; stop() still clears
+  both.
+- Tests: cover the before_agent_start no-nested-call contract, the headless
+  session_start positive path, and shut the runtime down via session_shutdown
+  so no watcher handle outlives the test.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
