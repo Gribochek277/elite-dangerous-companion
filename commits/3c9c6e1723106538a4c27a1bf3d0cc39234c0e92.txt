@@ -1,0 +1,24 @@
+repository: serhii/elite-dangerous-companion
+commit: 3c9c6e1723106538a4c27a1bf3d0cc39234c0e92
+date: 2026-10-12T18:16:20+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): correct archive byte offsets and explicit backfill acks
+- applyIngestBatch now advances fromOffset to the first kept line of a trimmed
+  chunk, so the archive writer computes the true byte range and a partial
+  overlap archives byte-identically instead of dropping the suffix
+- elite_backfill requests carry an id; the client echoes it (backfillRequestId)
+  and the server clears the pending request only on a matching echo, never on
+  an ordinary backfill post
+- the client acknowledges an empty-range request so it is not re-served forever
+- elite_backfill reports 'requested, not yet delivered' instead of success
+- tests: pinned fromOffset advance, byte-identical partial-overlap archive,
+  normal-backfill vs matching-ack, and empty-range acknowledgement
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
