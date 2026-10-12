@@ -1,0 +1,23 @@
+repository: serhii/elite-dangerous-companion
+commit: f1bcba0325e96b6a822310999b819aa39f7343e2
+date: 2026-10-12T14:58:17+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): identity-keyed cursors, remote query, and poll serialization
+- key client cursors and the ingest protocol by journal identity
+  (timestamp:part) instead of the literal filename, so a .log -> .log.backup
+  rotation rename never re-sends or duplicates the previous session.
+- EliteRuntime.query() now reads the remote store while a client is
+  connected, so elite_events/elite_search see streamed events.
+- serialize client polls through a queue (as the server watcher does), so
+  overlapping fs.watch/interval/startup triggers cannot duplicate lines.
+- start the poll loop before the connect retry, so a first-ever outage still
+  spools journal lines locally.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
