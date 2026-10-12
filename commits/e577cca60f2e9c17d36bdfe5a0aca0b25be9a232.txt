@@ -1,0 +1,23 @@
+repository: serhii/elite-dangerous-companion
+commit: e577cca60f2e9c17d36bdfe5a0aca0b25be9a232
+date: 2026-10-12T12:49:01+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): bound ingest request size, multi-client fallback, machineIds coercion
+- client/elite-stream.mjs sendRecords now sends one POST per budgeted chunk
+  and acks/prunes after each, so a large offline spool can never wedge
+  against the server's body cap.
+- index.ts onClientDisconnected falls back to the local journal only when
+  no client remains connected; with several machines one going idle no
+  longer un-mutes the local source while another is still streaming.
+- core/config.ts coerces server.machineIds to a string array (bare string,
+  comma list, JSON array or plain array), so ELITE_SERVER_MACHINE_IDS=game-1
+  resolves to ["game-1"] instead of a character set that rejects everyone.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
