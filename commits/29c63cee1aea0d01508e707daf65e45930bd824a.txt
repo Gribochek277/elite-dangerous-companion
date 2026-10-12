@@ -1,0 +1,27 @@
+repository: serhii/elite-dangerous-companion
+commit: 29c63cee1aea0d01508e707daf65e45930bd824a
+date: 2026-10-12T19:22:33+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): crew theme system (types, presets, store, prompt-gen, apply, service)
+- edcopilot/themes/types.ts: theme/crew/preset domain types keyed by the
+  canonical seven role ids
+- presets.ts: default theme plus space-pirate, corporate, military and
+  explorer presets, each grammar-valid
+- store.ts: filesystem-backed ThemeStore (current.json, ships.json,
+  history.json, presets.json) with atomic writes and shape-guarded loads
+- ship-crews.ts: hull-size to crew-role composition and role normalisation
+- prompt-gen.ts: grammar-pinned theme/crew prompts and template parsing
+- apply.ts: build/validate/preview/apply themed EDCoPilot files through the
+  ticket-11 write gate
+- service.ts: tool-facing functions (status, set, preview, apply, reset,
+  configureShip, generatePrompt, savePreset)
+- crew/store.ts: applyPersonalities + setHomeShip for theme application
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
