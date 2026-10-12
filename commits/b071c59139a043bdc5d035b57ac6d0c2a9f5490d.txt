@@ -1,0 +1,27 @@
+repository: serhii/elite-dangerous-companion
+commit: b071c59139a043bdc5d035b57ac6d0c2a9f5490d
+date: 2026-10-12T12:27:00+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): crew, chronicle and presence (ticket 09)
+- crew/store.ts: atomic crew.json/chronicle.jsonl/arcs.json persistence with a
+  default seven-role roster, game-time watermark dedupe for auto beats
+- crew/presence.ts: in_game/docked_at/in_space/out_of_game with lastSeenAt and
+  elapsed real time; Russian duration formatting
+- crew/chronicle.ts: data-driven significance table turning journal events
+  into narrative beats (routine scans, ranks, materials stay silent)
+- crew/prompt.ts: budgeted elite_crew system-prompt section with roster,
+  location, absence, recent beats and open threads
+- index.ts: register elite_crew_say (direct), elite_chronicle and
+  elite_presence (codemode); feed auto beats from the watcher; inject the
+  section at before_agent_start
+- tests: presence transitions, beat appending/dedupe, atomic-write survival,
+  prompt budget/recency and factory integration
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
