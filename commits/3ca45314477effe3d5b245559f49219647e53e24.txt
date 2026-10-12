@@ -1,0 +1,20 @@
+repository: serhii/elite-dangerous-companion
+commit: 3ca45314477effe3d5b245559f49219647e53e24
+date: 2026-10-12T12:23:54+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): classify 213 event types and add event query tools
+- core/events/table.ts: data-driven 213-type -> 17-category table (golden-compared)
+- core/events/summaries.ts: human-readable summary + key data for every type
+- core/query.ts: pure minute-window/free-text/structured filter engine
+- store: unknown types counted via the table, not silently dropped
+- index.ts: elite_events (direct) and elite_search (codemode) tools
+- scripts/check-parity.mjs + golden fixture regenerate from the Python original
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
