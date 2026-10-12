@@ -1,0 +1,14 @@
+repository: serhii/elite-dangerous-companion
+commit: ed4281535056733987c526e518f5a1b8d2830bc4
+date: 2026-10-13T02:53:02+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): resolve flat and dotted config placeholders and warn on unresolved ones (ticket 16)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
