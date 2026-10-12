@@ -1,0 +1,24 @@
+repository: serhii/elite-dangerous-companion
+commit: a291aa384c858e89bb2e002abf51a2e24c8da483
+date: 2026-10-12T13:57:52+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): backfill window, remote presence/status, and spool crash safety
+- client backfill now records out-of-window files as consumed so the first
+  poll no longer streams the whole pre-window history as deltas.
+- currentSnapshot returns the remote store while a client is connected, so
+  elite_presence and the elite_crew section stop reporting out_of_game.
+- the ingest protocol carries a Status.json snapshot; the client sends it on
+  change and the server routes it to store.applyStatus, keeping remote
+  GameState (fuel/cargo/credits/docked) in lockstep with local.
+- pollJournals/backfill spool (or send) lines before persisting the offset,
+  and loadSpool keeps valid records while dropping only damaged lines, so a
+  crash mid-poll can never lose events.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
