@@ -1,0 +1,30 @@
+repository: serhii/elite-dangerous-companion
+commit: 26655f3448be411830f8ac1ddcd2006b49b24c08
+date: 2026-10-12T19:54:46+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): archive prefix invariant and from-0 backfill refill
+The archive writer's byte-size dedup was only sound when the file was a
+byte-for-byte prefix of its journal, but a cursor-trimmed first write (cursor
+ahead of a fresh or hand-deleted archive) created a tail-only file, and a
+cursor reset then appended the replayed head after the tail — missing head,
+duplicated tail.
+
+- archive writer now refuses to write a chunk that starts past the archived
+  prefix (fromOffset > size) and reports it as gapped; a from-0 replay is the
+  only way to fill it, which overlap dedup then handles byte-identically
+- ingest passes the raw (untrimmed) chunks to the archive hook, so a from-0
+  elite_backfill refills a gapped archive even when the cursor already covers
+  the range; the writer's overlap dedup keeps replayed bytes out
+- the runtime counts and logs archive gaps distinctly
+- tests: nonzero-offset first append is gapped, cursor-reset replay rebuilds
+  byte-identically, re-backfill of a consumed range does not duplicate, and a
+  cursor-covered elite_backfill refills a gapped archive
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
