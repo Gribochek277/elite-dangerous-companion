@@ -1,0 +1,24 @@
+repository: serhii/elite-dangerous-companion
+commit: 94de2268b94dcda24caa7d3bf6e68785097f8f31
+date: 2026-10-12T20:50:53+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): serialize and guard backfill passes; include spanning files
+- heartbeat backfill handling now runs through the same enqueue() serialization
+  as polls and connects, with an in-flight guard keyed by the request id; the
+  enqueued handler re-fetches /health so a handler queued behind a running pass
+  sees the request already cleared and never starts a second full-range replay
+- backfillRange now fetches every file whose start is <= toMs instead of only
+  files starting inside the range, so a session that began before fromMs but
+  continued into it (a UTC day crossing midnight) is not silently missed
+- doConnect documents that it answers a pending request before markReady()
+- tests: overlapping heartbeats yield exactly one pass; a spanning file is
+  fetched whole; updated the old range test to the new eligibility
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
