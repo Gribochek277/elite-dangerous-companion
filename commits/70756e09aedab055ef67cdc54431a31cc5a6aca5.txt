@@ -1,0 +1,29 @@
+repository: serhii/elite-dangerous-companion
+commit: 70756e09aedab055ef67cdc54431a31cc5a6aca5
+date: 2026-10-12T20:50:36+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): drop gallery media blocks and make the wikitext cleaner clean
+- stripMediaBlocks removes <gallery>...</gallery> blocks (tags and their
+  file-list bodies) plus bare File:/Image:/Media: entries, so the vendored
+  pages no longer repeat ship/topic nouns as media navigation noise that BM25
+  could rank into the top cited passages.
+- convertEmphasis is now apostrophe-aware and line-safe: a single apostrophe
+  inside a run is content (English contractions), not a delimiter, and runs
+  never span a newline, so 'Turner's Quest' becomes *Turner's Quest* instead
+  of a stray '' run.
+- cleanTableCell folds <br> into a space so an inline break inside a table row
+  no longer splits the rendered Markdown row across lines.
+- Tests: gallery-block, <br>-in-row and apostrophe-emphasis fragments, plus a
+  page-wide cleanliness assertion over the committed snapshot (no [[, File:,
+  link=, '' or ''' anywhere in lore/pages/*.md).
+- Regenerated the 90 committed pages with the fixed cleaner; index.json keeps
+  the same shape (version 1, source, license, snapshotDate, pages[].url).
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
