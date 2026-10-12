@@ -1,0 +1,27 @@
+repository: serhii/elite-dangerous-companion
+commit: 45c433b50058289cb35bc2ab29afd9bda18a1a6f
+date: 2026-10-12T07:56:20+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(extension): scaffold the elite extension with the /elite command
+Ticket 01 prefactor: a TypeScript package under .pi/extensions/elite that Pi
+loads when it is launched from the project root.
+
+- package.json: type module, scripts.test, scripts.typecheck, no runtime
+  dependency (typescript and @types/node only as devDependencies)
+- tsconfig.json mirroring the pi-lsp convention, no build step
+- index.ts exports the extension factory: the /elite command reports "not
+  configured", no tools are registered, nothing long-lived starts in the factory
+- synthetic journal fixtures: four Journal logs in both filename formats, two
+  .log.backup files and Status.json, covering the event types later tickets need
+- test/scaffold.test.mjs guards the fixtures and the factory contract
+- .gitignore: test scratch directories match at any depth, so the extension's
+  test/tmp/ is ignored too
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
