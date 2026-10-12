@@ -1,0 +1,21 @@
+repository: serhii/elite-dangerous-companion
+commit: 3545701116350e1aefda46ba097bd35c5683af85
+date: 2026-10-12T16:20:34+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): push notifications — rules, batching, dedupe, idle gate
+Add notify/rules.ts (declarative rules: type/category/predicate matches,
+priority, template, cooldown) and notify/batcher.ts (dedupe by type/system/
+timestamp, per-rule cooldowns, quiet hours, digest batching, idle-gated
+sendOptions). Wire the runtime to feed journal events to the batcher and
+deliver via pi.sendMessage: critical events raise a turn when idle and queue
+as a follow-up mid-turn; lower-priority events flush as one compact digest
+every digestMinutes and never raise a turn.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
