@@ -1,0 +1,21 @@
+repository: serhii/elite-dangerous-companion
+commit: 95e6017527d5f6ba4a705684b45fdd0f074931fc
+date: 2026-10-12T11:09:53+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): never drop events when a journal read fails mid-plan
+executeReadPlan now catches a per-instruction read failure, returns the lines
+read so far with an incomplete marker and the failed identities, and leaves
+the failed file's offset untouched. The active/bootstrapped cursor only
+advances once every instruction in the plan succeeded, so a partial failure
+never marks a file consumed or orphans a rotation drain; the next poll resumes
+at the failed file. The watcher surfaces incomplete reads through onError,
+which the runtime now counts and logs instead of ignoring.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
