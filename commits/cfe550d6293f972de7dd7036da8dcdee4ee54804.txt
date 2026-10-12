@@ -1,0 +1,28 @@
+repository: serhii/elite-dangerous-companion
+commit: cfe550d6293f972de7dd7036da8dcdee4ee54804
+date: 2026-10-12T21:45:29+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): prototype-safe categories, read-only theme tools, name-based exposure
+- core/events/table.ts: route categoryOf/categoryOfType through isKnownType
+  so inherited keys (constructor, toString, __proto__) resolve to 'other'
+  instead of an Object.prototype member
+- edcopilot/themes/store.ts: drop eager mkdir + ensureFilesExist from the
+  constructor so read-only theme tools (status, preview, prompt) construct
+  the store without writing files; persistence still mkdirs on mutation
+- index.ts: export ELITE_DIRECT_TOOLS (the six hot tools) and keep
+  elite_theme_status/preview/prompt readOnlyHint: true
+- test: prototype-key category regression, read-only theme tool side-effect
+  guard, and exposure asserted by name against ELITE_DIRECT_TOOLS
+- README.md: drop the pending-resource-layer wording; six hot tools are the
+  final layout
+
+318 tests green, tsc clean.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
