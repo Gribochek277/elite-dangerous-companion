@@ -1,0 +1,26 @@
+repository: serhii/elite-dangerous-companion
+commit: c135942b6d7488029b90f3fb624305d8cd4c89b6
+date: 2026-10-12T15:53:35+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): historian and vendored lore snapshot (ticket 10)
+- scripts/snapshot-lore.mjs fetches seed + linked pages from the Elite
+  Dangerous wiki API, converts wikitext to markdown, and writes the snapshot
+  manifest (snapshotDate + source URLs) and CC-BY-SA attribution
+- commit 90 lore pages under .pi/extensions/elite/lore/pages/
+- lore/wikitext.ts: pure wikitext -> markdown cleaner (templates, refs,
+  links, emphasis, headings, lists, tables)
+- lore/retrieve.ts: BM25-style passage ranking with current-system preference
+- lore/index.ts: snapshot loader; lore/historian.ts: snapshot-first answers
+  with web-search fallback and an isIdle-gated nested-model briefing path
+- register elite_historian (direct) and inject an out-of-game briefing section
+- tests: wikitext cleaning, passage ranking, historian flow, nested-call gate,
+  committed snapshot integrity
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
