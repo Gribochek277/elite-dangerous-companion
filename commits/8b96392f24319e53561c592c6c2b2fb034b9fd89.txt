@@ -1,0 +1,27 @@
+repository: serhii/elite-dangerous-companion
+commit: 8b96392f24319e53561c592c6c2b2fb034b9fd89
+date: 2026-10-12T21:24:54+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): status widget, tool renderers and project docs (ticket 13)
+- ui/widget.ts: live status widget above the editor showing data source,
+  current system/station and pending notification beats; pure
+  renderStatusWidget plus a Component adapter wired in session_start
+- ui/renderers.ts: compact transcript renderers for elite_status,
+  elite_events, elite_search, elite_history, elite_historian and
+  elite_presence, collapsed summary / expanded full text
+- README.md: project, client-server setup, pi-config elite section and
+  known limitations
+- docs/code-standards.md: document the six-hot-tool exposure contract,
+  ui/ modules and ticket 13 test coverage
+- tsconfig.json: map @earendil-works/pi-tui for typechecking
+
+316 tests green, tsc clean.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
