@@ -1,0 +1,24 @@
+repository: serhii/elite-dangerous-companion
+commit: e675634c9bc6db49bfd3fb92c182ad5c19fb913f
+date: 2026-10-12T21:30:28+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): resolve the 17 elite:// resource URIs (ticket 08)
+Add the resource layer that keeps the original MCP URI surface 1:1:
+- resources/uri.ts defines all 17 URIs, list/parse/resolve, a TTL cache
+  with an explicit refresh path, and closest-match suggestions for
+  unknown URIs.
+- index.ts registers elite_resource (direct) and elite_resource_list
+  (codemode), wired to the live journal snapshot through EliteRuntime.
+- resources.test.mjs covers every URI and every documented query
+  parameter, including invalid values for events/search (unknown
+  category, non-numeric and negative minutes), the cache/refresh
+  behaviour, and the unknown-URI error path.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
