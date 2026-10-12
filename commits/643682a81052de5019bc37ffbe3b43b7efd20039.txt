@@ -1,0 +1,14 @@
+repository: serhii/elite-dangerous-companion
+commit: 643682a81052de5019bc37ffbe3b43b7efd20039
+date: 2026-10-12T08:13:14+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+chore: ignore orchestrator state directory
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
