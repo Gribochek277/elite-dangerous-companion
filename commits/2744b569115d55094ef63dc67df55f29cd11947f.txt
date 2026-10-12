@@ -1,0 +1,25 @@
+repository: serhii/elite-dangerous-companion
+commit: 2744b569115d55094ef63dc67df55f29cd11947f
+date: 2026-10-12T17:20:16+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): archive raw journals, history scan and date-range backfill
+- core/archive.ts: raw journal archive under <dataDir>/archive/<machineId>/,
+  append-only and idempotent by archive file size; streaming line scan
+- core/history.ts: archive range query over core/date.ts with type/category/
+  system filters, malformed-line counting and a bounded newest-first buffer
+- elite_history tool: date-range queries read the archive, not the client
+- elite_backfill tool: stores a pending request served on /health; the client
+  answers it by streaming whole files whose start falls in the range
+- wire archive writes into the local watcher (machineId 'local') and remote
+  ingest (per-machine); strip .backup so one logical file stays one archive
+- journal.ts/watcher.ts: onFileRead hook so raw lines can be archived per file
+- no automatic archive pruning exists anywhere
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
