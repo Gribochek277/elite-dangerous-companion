@@ -1,0 +1,21 @@
+repository: serhii/elite-dangerous-companion
+commit: 7a1c453aafbe3c2e0b9a1ceea9bc34be1a48e303
+date: 2026-10-12T16:04:50+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): key performance money to event types and report not-configured
+- performance: attribute credits by event type instead of field name, so
+  MissionAccepted.Reward (promised) is not counted as earned and
+  ShipyardSell.ShipPrice is income, not spend. Adds fixture coverage for
+  accepted-then-completed missions, an uncompleted mission, and ship buy/sell.
+- prompts: the nine /elite-* commands short-circuit to NOT_CONFIGURED_MESSAGE
+  when the snapshot source is "none" instead of sending a zeroed prompt. The
+  message now lives in prompts/commands.ts and is re-exported by index.ts.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
