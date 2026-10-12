@@ -1,0 +1,27 @@
+repository: serhii/elite-dangerous-companion
+commit: 86bfea824eb7df3dce67e7caaed212061f04049a
+date: 2026-10-12T20:28:39+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(elite): explicit backfill completion signal, not first-post ack
+The pending elite_backfill request was cleared on the first accepted POST that
+echoed its id, so a mid-range failure lost the rest of the range, and the ack
+was derived from file count, so a matched file with no complete lines left the
+request re-served forever.
+
+- the client no longer echoes the request id on data batches; it sends one
+  explicit empty-files completion batch after the whole range streamed
+  successfully, and skips it when a send fails so the request stays pending
+  for the next connect/heartbeat
+- the server clears the pending request only on that completion batch (empty
+  files + echoed id), never on a data batch
+- tests: a multi-file range failing part way is re-served and completes with a
+  single ack; a matched file yielding no lines still acks exactly once
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
