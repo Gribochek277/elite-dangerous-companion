@@ -1,0 +1,21 @@
+repository: serhii/elite-dangerous-companion
+commit: 6c103cc9af6dd32f521f1b698740ab29d2ebb0be
+date: 2026-10-13T05:30:36+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(scripts): lean Pi launcher and context-budget check (ticket 19)
+scripts/elite-pi.sh starts Pi with only the built-in agent tools, codemode
+and the elite extension (--no-extensions -e builtin:codemode -e elite,
+--no-mcp --no-skills --no-prompt-templates); ELITE_PI_FULL=1 runs plain pi.
+scripts/check-lean-launch.sh measures both launches through pi --mode rpc and
+asserts the lean tool set, the missing skills section and the 25% reduction.
+README and AGENTS.md document the measured context budget and why a project
+.pi/settings.json cannot gate user-scope extensions.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
