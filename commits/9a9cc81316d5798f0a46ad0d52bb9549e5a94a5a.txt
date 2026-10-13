@@ -1,0 +1,27 @@
+repository: serhii/elite-dangerous-companion
+commit: 9a9cc81316d5798f0a46ad0d52bb9549e5a94a5a
+date: 2026-10-13T03:25:13+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): accept two-ended date ranges in elite_history and elite_backfill (ticket 17)
+elite_history and elite_backfill now take independent from and to phrases
+next to range, all resolved by core/date.ts (resolveDateWindow): the start
+is from's .start, the end is to's .end, from alone runs to now, to alone
+and an empty window are rejected with a DateRangeError naming the accepted
+forms instead of answering with zero results.
+
+A single range phrase also accepts two-ended forms ('2026-01-14 to
+2026-01-17', 'from X to Y', 'between X and Y') when both sides parse;
+every existing phrase keeps its old behaviour.
+
+elite_history's text now names each archive machine searched with its
+event count, and the structured result gains machineCounts next to the
+unchanged machines[].
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
