@@ -1,0 +1,26 @@
+repository: serhii/elite-dangerous-companion
+commit: e5eae56c035e7937b3e50fe789651bca0b939e5c
+date: 2026-10-13T03:25:11+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+feat(elite): make several game machines self-serve (ticket 18)
+Rejected ingest batches now log a rate-limited warning that names the
+machine id and the config that admits it (elite.server.machineIds /
+ELITE_SERVER_MACHINE_IDS), so a retrying client cannot spam the log.
+
+elite_status reports the multi-client state in text and structured
+details: the machine gate (allow-list vs single-tenant auto-register),
+the allowed ids, the connected machines and which of them is active.
+
+README gains a 'Several game machines' section covering the allow-list,
+per-machine ids (ELITE_CLIENT_MACHINE_ID), per-machine cursors and
+archives, merged elite_history, and an end-to-end connection check
+(/health, the 403 unknown-machine reason, and the server warning).
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
