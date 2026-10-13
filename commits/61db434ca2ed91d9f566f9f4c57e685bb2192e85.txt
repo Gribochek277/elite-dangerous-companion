@@ -1,0 +1,28 @@
+repository: serhii/elite-dangerous-companion
+commit: 61db434ca2ed91d9f566f9f4c57e685bb2192e85
+date: 2026-10-13T06:10:15+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+docs(quickstart): game-machine quick start with an end-to-end check (ticket 20)
+README gains "Quick start: the game machine" directly after the server quick
+start: five numbered steps from the server's token and address to a verified
+`source: remote` session, covering both ways to get the client onto the game
+machine, the standard journal locations, the streamer and elite-play.sh, the
+verify commands, the allow-list step that otherwise rejects a second machine,
+and a troubleshooting list.
+
+scripts/check-game-machine-quickstart.sh replays that flow through the real
+binaries — the extension runtime's ingest listener on an ephemeral port with a
+temp dataDir, and the real client/elite-stream.mjs over the committed journal
+fixtures — and asserts the ready marker, the archive under archive/<machineId>/,
+the /health cursor, elite_status reporting source: remote with the machine id
+and active, the 403 rejection of an unlisted id, and the local fallback. It
+kills every process it starts and removes its temp tree.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
