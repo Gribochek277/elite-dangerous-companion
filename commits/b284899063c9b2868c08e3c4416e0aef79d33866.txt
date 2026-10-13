@@ -1,0 +1,14 @@
+repository: serhii/elite-dangerous-companion
+commit: b284899063c9b2868c08e3c4416e0aef79d33866
+date: 2026-10-13T03:13:17+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 16: 16-config-interpolation-and-docs
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
