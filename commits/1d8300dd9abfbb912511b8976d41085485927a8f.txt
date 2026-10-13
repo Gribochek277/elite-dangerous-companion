@@ -1,0 +1,37 @@
+repository: serhii/elite-dangerous-companion
+commit: 1d8300dd9abfbb912511b8976d41085485927a8f
+date: 2026-10-13T06:55:18+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+fix(review): make the Steam launch recipe and the --help claims true (ticket 20)
+Round 1 findings.
+
+The documented `ELITE_GAME_CMD='steam -applaunch 359320'` never blocked: with
+Steam already running it forwards the command line to the running client and
+returns, so elite-play.sh stopped the streamer the moment it launched the game
+(and with Steam closed it blocked on Steam, not the game). The README now says
+what Steam actually does, makes the streamer-independently-of-the-launcher
+recipe primary for Steam, and keeps elite-play.sh for genuinely blocking
+launchers — either the Proton binary directly or the new
+scripts/elite-wait-for-game.sh, which runs the launcher, waits (bounded) for
+the game process to appear, then waits for it to exit.
+
+`--help` was documented but missing: client/elite-stream.mjs and
+scripts/elite-play.sh now print their variables and flags and exit 0 without
+any config, and a test spawns the streamer with --help and asserts exit 0 plus
+the three required variables.
+
+The check's server timeout (5 s) sat below the client's 30 s heartbeat, so the
+remote-status assertions only survived thanks to a recent /health poke; it is
+now 60 s, and those assertions ride on a journal line the check writes on the
+game machine, so they prove a live delta arrived. The check also asserts --help
+for all three tools and that the wrapper blocks until the fake game process is
+gone (verified to fail when the wrapper is made non-blocking).
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
