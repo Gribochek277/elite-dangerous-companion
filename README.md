@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/elite-dangerous-companion`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/elite-dangerous-companion` | Synced: 2026-10-13T02:56:18Z
+> Source: Forgejo `serhii/elite-dangerous-companion` | Synced: 2026-10-13T04:07:21Z
 
 ---
 
@@ -75,7 +75,8 @@ fixtures.
   test/                   node --test suites and fixtures
 client/elite-stream.mjs   the game-machine streamer
 scripts/                  snapshot-lore.mjs, elite-play.sh, elite-pi.sh,
-                          check-lean-launch.sh, check-parity.mjs
+                          elite-wait-for-game.sh, check-lean-launch.sh,
+                          check-parity.mjs, check-game-machine-quickstart.sh
 ```
 
 ## Requirements
@@ -114,6 +115,263 @@ works and loads everything; see [Lean session](#lean-session-context-budget).
 cd .pi/extensions/elite
 node --test test/*.test.mjs      # unit + integration tests
 npx tsc -p tsconfig.json         # typecheck
+```
+
+## Quick start: the game machine
+
+The machine that runs the game needs Node 22+ and the repository (or one file
+from it) — no Pi and no `npm install`. It runs a single program that watches
+the journal directory and streams it to the Pi session on the server. Five
+steps, in order.
+
+### 1. Collect the two values from the server
+
+Everything below needs the server's address and the bearer token its listener
+checks. On the **server**, print the token:
+
+```bash
+node ~/.pi/agent/bin/pi-config.mts get elite.server.token
+```
+
+and find the address the listener actually accepts. It defaults to
+`127.0.0.1`, which only the server itself can reach, so the game machine needs
+the server's LAN address (`hostname -I` on Linux) or its tailnet address:
+
+```bash
+hostname -I            # e.g. 192.168.1.20 — the address both machines share
+tailscale ip -4        # when both are on your tailnet
+```
+
+Keep the two values: every step below uses them as `SERVER_URL`
+(`http://<address>:7345`) and `TOKEN`.
+
+**If this is not the first game machine, admit it now.** With an empty
+`elite.server.machineIds` the server is single-tenant: it auto-registers the
+*first* machine id it sees, so one game machine needs no configuration and a
+second one is rejected until you list it. On the server, add every id you
+stream from — a machine's id defaults to its hostname:
+
+```bash
+node ~/.pi/agent/bin/pi-config.mts set elite.server.machineIds '["desktop","laptop"]'
+```
+
+Then restart the Pi session on the server: the `elite` config is read once, at
+session start. Until the id is admitted, every batch from the client is answered
+with
+
+```json
+{"ok":false,"reason":"unknown-machine"}
+```
+
+and the server logs one rate-limited warning naming the id and the fix:
+
+```
+[elite] ingest: rejected machine id "laptop" (unknown-machine): the server is single-tenant and already registered "desktop"; add it to elite.server.machineIds / ELITE_SERVER_MACHINE_IDS to admit it
+```
+
+### 2. Get the client onto the game machine
+
+Clone the repository (recommended — `client/elite-stream.mjs` and
+`scripts/elite-play.sh` come along, with their `--help`):
+
+```bash
+git clone <this-repo> elite_dangerouse_componion
+```
+
+or copy just the one file, from the server, with a single `scp` line:
+
+```bash
+scp <this-repo>/client/elite-stream.mjs gamerig:~/elite-stream.mjs
+```
+
+The streamer is plain Node ESM with no dependencies and no Pi: nothing else has
+to be installed on the game machine.
+
+### 3. Find the journal directory
+
+Elite writes `Journal.<timestamp>.<part>.log` files and a `Status.json` into one
+per-user directory. Where that is depends on how the game is installed:
+
+| Install | Journal directory |
+|---|---|
+| Steam/Proton on Linux (app 359320) | `~/.steam/steam/steamapps/compatdata/359320/pfx/drive_c/users/steamuser/Saved Games/Frontier Developments/Elite Dangerous` — on another library, `<library>/steamapps/compatdata/359320/pfx/drive_c/users/<user>/Saved Games/...`; a running Steam game also exports the prefix as `$STEAM_COMPAT_DATA_PATH` |
+| Heroic | `<defaultWinePrefix>/<game>/drive_c/users/<user>/Saved Games/Frontier Developments/Elite Dangerous`, e.g. `~/Games/Heroic/Prefixes/default/EliteDangerous/drive_c/users/steamuser/Saved Games/Frontier Developments/Elite Dangerous`; `defaultWinePrefix` is set in Heroic's own `config.json` |
+| Lutris | `<prefix>/drive_c/users/<user>/Saved Games/Frontier Developments/Elite Dangerous`, where `<prefix>` is the `prefix:` of the game's YAML in `~/.config/lutris/games/` |
+| Any other prefix (self-managed Wine/Proton; Elite has no native Linux build) | `<prefix>/drive_c/users/<user>/Saved Games/Frontier Developments/Elite Dangerous` |
+| Windows | `%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous` |
+| macOS | `~/Library/Application Support/Frontier Developments/Elite Dangerous` |
+
+One line proves the directory is the right one — it must hold at least one
+journal and `Status.json`:
+
+```bash
+ls "<journal dir>"/Journal.*.log "<journal dir>"/Status.json
+```
+
+If nothing matches, start the game once (Elite only creates the directory once
+it has run) and let the machine find it:
+
+```bash
+find ~ -name 'Status.json' -path '*Elite Dangerous*' 2>/dev/null
+```
+
+### 4. Start the streamer
+
+With the two values from step 1 and the directory from step 3, on the **game
+machine**:
+
+```bash
+export SERVER_URL="http://192.168.1.20:7345"
+export TOKEN="<the token from step 1>"
+export JOURNAL="/home/you/.steam/steam/steamapps/compatdata/359320/pfx/drive_c/users/steamuser/Saved Games/Frontier Developments/Elite Dangerous"
+
+ELITE_JOURNAL_PATH="$JOURNAL" \
+ELITE_CLIENT_SERVER_URL="$SERVER_URL" \
+ELITE_CLIENT_TOKEN="$TOKEN" \
+ELITE_CLIENT_MACHINE_ID="$(hostname)" \
+  node client/elite-stream.mjs          # or ~/elite-stream.mjs from the scp copy
+```
+
+`ELITE_CLIENT_MACHINE_ID` is the id step 1 admitted and defaults to
+`os.hostname()`; set it explicitly so the id does not change when the machine
+is renamed. (`--journal-dir`, `--server-url`, `--token`, `--machine-id` are the
+same values as flags.) On first connect the streamer backfills the last
+`backfillDays` (default 30) of journals and then streams new lines as the game
+writes them.
+
+Or let `scripts/elite-play.sh` manage the lifecycle — it starts the streamer,
+waits until it is connected, runs the game in the foreground and stops the
+streamer when the game exits. It needs `ELITE_GAME_CMD` to **block until the
+game exits**, and Steam does not give you that: with Steam already running,
+`steam -applaunch 359320` (like the `steam steam://rungameid/359320` URL form)
+forwards the command line to the running client and returns immediately, so
+`elite-play.sh` would stop the streamer the moment it launched the game.
+
+**For Steam, run the streamer independently of the launcher** — start it in the
+background, play, and stop it when you are done:
+
+```bash
+mkdir -p ~/.cache/elite-stream
+
+ELITE_JOURNAL_PATH="$JOURNAL" \
+ELITE_CLIENT_SERVER_URL="$SERVER_URL" \
+ELITE_CLIENT_TOKEN="$TOKEN" \
+ELITE_CLIENT_MACHINE_ID="$(hostname)" \
+  node client/elite-stream.mjs >~/.cache/elite-stream/streamer.log 2>&1 &
+echo $! >~/.cache/elite-stream/streamer.pid    # stop it: kill "$(cat ~/.cache/elite-stream/streamer.pid)"
+
+steam -applaunch 359320
+```
+
+`elite-play.sh` still fits when the launch command really does block on the
+game: launching the Proton binary directly, or wrapping a launcher that returns
+early with `scripts/elite-wait-for-game.sh`. That wrapper runs the launcher,
+waits for the game process to appear (`ELITE_GAME_WAIT_APPEAR_S`, default 60 s),
+then waits for it to exit:
+
+```bash
+ELITE_JOURNAL_PATH="$JOURNAL" \
+ELITE_CLIENT_SERVER_URL="$SERVER_URL" \
+ELITE_CLIENT_TOKEN="$TOKEN" \
+ELITE_CLIENT_MACHINE_ID="$(hostname)" \
+ELITE_GAME_CMD="scripts/elite-wait-for-game.sh EliteDangerous64 steam -applaunch 359320" \
+  scripts/elite-play.sh
+```
+
+`EliteDangerous64` there is a `pgrep -f` match on the running game's command
+line, not a fixed name — check yours with `pgrep -af Elite` while the game runs
+and pass what it prints. `elite-play.sh` runs `ELITE_GAME_CMD` as one command
+line, so run it from the clone root. The log is
+`~/.cache/elite-stream/elite-play.log`.
+
+### 5. Verify it is streaming
+
+The streamer prints its target on startup and writes a ready marker once the
+server has accepted its first batch:
+
+```
+[elite-stream] streaming /home/you/.steam/.../Elite Dangerous -> http://192.168.1.20:7345 as desktop
+```
+
+```bash
+ls ~/.cache/elite-stream/ready     # exists while the streamer is connected
+```
+
+Ask the server with the token (from the game machine or any host on the LAN):
+
+```bash
+curl -s -H "Authorization: Bearer $TOKEN" \
+  "http://192.168.1.20:7345/health?machineId=desktop"
+# {"ok":true,"version":"1","acceptingUpTo":{"lastSeq":6,"files":{"1768551300000:2":835,"...":18422}},"backfillRequest":null}
+```
+
+`acceptingUpTo` is null until the first batch is accepted; a cursor with files
+and a `lastSeq` means the server has consumed this machine's journals and will
+resume from exactly there after either side restarts.
+
+Finally, on the **server**, in the Pi session: `/elite`, or ask *"where am
+I?"*. `elite_status` switches to the connected machine:
+
+```
+Elite Dangerous Companion — source: remote
+Journal:   remote: desktop
+Machines:  allow-list (desktop, laptop); connected: desktop (active)
+
+System:    Sol
+Station:   Abraham Lincoln (docked)
+Ship:      FerDeLance "Good Intentions" (EXP-01)
+Fuel:      28.8 / 32.0
+Cargo:     0
+Credits:   3,141,592
+```
+
+`source: remote` and `remote: desktop` mean a connected game machine is the
+live source, and `Machines:` shows the gate, who is connected and which client
+is active. While a client is connected the local journal path (if one is
+configured) is muted; when the last client stops, the server falls back to it.
+
+### When it does not work
+
+- **The server is unreachable.** The streamer logs
+  `cannot reach server (<reason>); retrying in ...`, keeps retrying (backoff up
+  to 30 s) and loses nothing: un-acknowledged lines are spooled to
+  `~/.cache/elite-stream/spool.jsonl` (`ELITE_CLIENT_SPOOL_DIR`) and replayed on
+  reconnect, while the byte offsets in the `state.json` next to it mean a reboot
+  on either side resumes where it stopped, without duplicates. Only the last
+  `backfillDays` (30) of journals stream on a first connect — from Pi, ask for
+  older history with `elite_backfill` (a `range` phrase like `"last year"`, or
+  `from`/`to`).
+- **`403 {"ok":false,"reason":"unknown-machine"}`.** Another machine id is
+  registered and this one is not in `elite.server.machineIds`. Add it (step 1
+  again), restart the Pi session on the server, and the already-retrying client
+  starts streaming on its own.
+- **Connected but no data.** `ready` only means the server accepted the
+  connection — an empty or wrong journal directory still connects and streams
+  nothing. The streamer's log line names the directory it watches; check it with
+  the `ls` from step 3.
+- **The game is running, Pi shows no new events, and the streamer stopped.**
+  `ELITE_GAME_CMD` returned as soon as it launched the game — Steam forwarding
+  `-applaunch` to the running client does exactly that — so `elite-play.sh` took
+  the streamer down with it. Use the background streamer above, or wrap the
+  launcher with `scripts/elite-wait-for-game.sh` and give it the process name
+  from `pgrep -af Elite`.
+- **`401 unauthorized`.** The two tokens differ, and the streamer's log shows
+  `cannot reach server (unauthorized)`. Compare
+  `node ~/.pi/agent/bin/pi-config.mts get elite.server.token` on the server with
+  the `ELITE_CLIENT_TOKEN` you exported on the game machine. A token that is not
+  present at all is cleared at session start rather than used as a literal
+  `${...}` string, and shows up in the server's config warnings.
+- **Nothing reaches the server at all.** The listener binds `127.0.0.1` by
+  default, which a remote machine cannot reach. Set `elite.server.host` to
+  `0.0.0.0` (or the LAN/tailnet address) on the server, restart the Pi session,
+  and confirm the listener with `ss -ltnp | grep 7345` on the server. If it is
+  bound correctly, a firewall is the next suspect.
+
+The whole flow above is exercised end to end by a script, with the real server
+listener and the real streamer over the committed journal fixtures:
+
+```bash
+bash scripts/check-game-machine-quickstart.sh
 ```
 
 ## Lean session (context budget)
@@ -262,6 +520,8 @@ autodetection does not find your install.
 ## Client setup (game machine)
 
 The game machine runs only `client/elite-stream.mjs`. It needs Node and no Pi.
+The step-by-step version is [Quick start: the game machine](#quick-start-the-game-machine);
+what follows is the reference.
 
 ```bash
 ELITE_JOURNAL_PATH="/path/to/journal" \
@@ -273,13 +533,16 @@ node client/elite-stream.mjs
 Or use `scripts/elite-play.sh`, which starts the streamer, waits until it is
 connected, launches the game in the foreground, and stops the streamer when the
 game exits. It reads the same `ELITE_*` variables plus `ELITE_GAME_CMD` (a
-command that blocks until the game exits).
+command that blocks until the game exits — Steam's `-applaunch` returns
+immediately, so wrap it as the quick start shows). The streamer, `elite-play.sh`
+and `elite-wait-for-game.sh` all answer `--help`.
 
 On first connect the client backfills the last `backfillDays` (default 30) of
 journals, then streams deltas. Use `elite_backfill` with a `range` phrase (or
 `from`/`to`) to request older history, delivered on the client's next
-heartbeat. `scripts/elite-play.sh` and the streamer are the only things that
-run on the game machine; everything else lives on the server.
+heartbeat. `scripts/elite-play.sh` (with its optional `elite-wait-for-game.sh`
+wrapper) and the streamer are the only things that run on the game machine;
+everything else lives on the server.
 
 ## Several game machines
 
@@ -393,6 +656,13 @@ Python venv are present; the unit suite itself stays hermetic.
 `scripts/elite-pi.sh` through `pi --mode rpc` and checks the resulting context
 budget (see [Lean session](#lean-session-context-budget)); it asserts on the
 rendered system message, not on the model's answer.
+
+`scripts/check-game-machine-quickstart.sh` replays the game-machine quick start
+end to end: the real ingest listener with a temp dataDir and an ephemeral port,
+the real `client/elite-stream.mjs` over the committed journal fixtures, then the
+archive, `/health` cursor, `elite_status` (`source: remote`, plus a live delta),
+the allow-list rejection and the `elite-wait-for-game.sh` blocking guarantee. It
+starts and kills its own processes and removes its temp tree.
 
 ## Known limitations
 
